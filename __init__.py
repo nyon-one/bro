@@ -20,6 +20,13 @@ class SessionX(Session):
 	def _soup(self, content, **kwargs):
 		return BeautifulSoup(content, self.PARSER, **kwargs)
 
+	def clean_soup(self, soup, select=None):
+		if not select:
+			select = 'script'
+		for e in soup.select(select):
+			# s.extract()
+			e.decompose()
+
 	def parse_url(self, url):
 		class Url(object):
 			def __init__(self, url):
@@ -38,11 +45,16 @@ class SessionX(Session):
 		r.soup = self._soup(r.text)
 		return r
 
+	def html(self, url, **kwargs):
+		return self.get(url, **kwargs).soup
+
 class Bro(SessionX):
 	USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36'
+	HEADERS = {}
 	def __init__(self, *args, **kwargs):
 		SessionX.__init__(self, *args, **kwargs)
 		self.headers['user-agent'] = self.USER_AGENT
+		self.headers.update(self.HEADERS)
 
 class MobBro(Bro):
 	USER_AGENT = 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7'
