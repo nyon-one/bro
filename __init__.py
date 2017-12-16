@@ -48,6 +48,10 @@ class SessionX(Session):
 	def html(self, url, **kwargs):
 		return self.get(url, **kwargs).soup
 
+	def links(self, url, **kwargs):
+		a = self.html(url).find_all('a', **kwargs)
+		return a
+
 class Bro(SessionX):
 	USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36'
 	HEADERS = {}
