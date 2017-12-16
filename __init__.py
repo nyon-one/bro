@@ -51,10 +51,13 @@ class SessionX(Session):
 class Bro(SessionX):
 	USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.130 Safari/537.36'
 	HEADERS = {}
+	COOKI = {}
 	def __init__(self, *args, **kwargs):
 		SessionX.__init__(self, *args, **kwargs)
 		self.headers['user-agent'] = self.USER_AGENT
 		self.headers.update(self.HEADERS)
+		if self.COOKI:
+			self.cookies = self.COOKI
 
 class MobBro(Bro):
 	USER_AGENT = 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7'
