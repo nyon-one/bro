@@ -2,15 +2,6 @@ from http.cookiejar import LWPCookieJar
 from ..rel import Rel
 from . import Bro, SessionX
 
-from os import (path, environ)
-GOOGLE_USER_DATA = path.join(environ['LOCALAPPDATA'],
-	'Google', 'Chrome', 'User Data')
-
-def chrome_profile_join(*args):
-	o = glob(GOOGLE_USER_DATA+'\Profile *')
-	o.append(GOOGLE_USER_DATA+'\Default')
-	return (path.join(i, *args) for i in o)
-
 class LocalCookie(LWPCookieJar):
 	def __init__(self, file_name):
 		file_name = Rel(__file__).folder('.cook').join(file_name)
@@ -20,7 +11,7 @@ class LocalCookie(LWPCookieJar):
 		return len(self) == 0
 
 from browser_cookie3 import (firefox, Chrome)
-
+from . import chrome_profile_join
 def chrome_cook(profile='Default', filename='Cookies'):
 	for i in chrome_profile_join(filename):
 		o = Chrome(i)
